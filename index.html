@@ -117,34 +117,30 @@ font-size:30px;
 
 <div class="products">
 
-<div class="card">
-<img src="https://co.com">
-<h3>প্যারাডক্সিক্যাল সাজিদ</h3>
-<p>৳220</p>
-<button onclick="addToCart('প্যারাডক্সিক্যাল সাজিদ',220)">কার্টে যোগ</button>
-</div>
+<header class="header">
+    <img src="logoo.jpeg" class="logo">
+    <p>ইসলামিক বইয়ের নির্ভরযোগ্য দোকান</p>
 
-<div class="card">
-<img src="https://co.com">
-<h3>দোয়ার ডায়েরি</h3>
-<p>৳230</p>
-<button onclick="addToCart('দোয়ার ডায়েরি',230)">কার্টে যোগ</button>
-</div>
+    <input type="text" id="search" onkeyup="searchProduct()" placeholder="🔍 বই খুঁজুন...">
+</header>
 
-</div>
+<h2 class="title">📚 জনপ্রিয় বই</h2>
 
-<div class="cart-btn" onclick="openCart()">
-🛒 Cart (<span id="count">0</span>)
-</div>
+<div class="products" id="productList">
 
-<div id="cartBox" class="cart-box">
-<h3>Cart</h3>
-<div id="cartItems"></div>
+    <div class="card" data-name="প্যারাডক্সিক্যাল সাজিদ">
+        <img src="https://co.com">
+        <h3>প্যারাডক্সিক্যাল সাজিদ</h3>
+        <p>৳220</p>
+        <button onclick="addToCart('প্যারাডক্সিক্যাল সাজিদ',220)">কার্টে যোগ</button>
+    </div>
 
-<p>Total: ৳<span id="total">0</span></p>
-
-<button onclick="checkout()">Checkout WhatsApp</button>
-<button onclick="closeCart()">Close</button>
+    <div class="card" data-name="দোয়ার ডায়েরি">
+        <img src="https://co.com">
+        <h3>দোয়ার ডায়েরি</h3>
+        <p>৳230</p>
+        <button onclick="addToCart('দোয়ার ডায়েরি',230)">কার্টে যোগ</button>
+    </div>
 </div>
 
 <a class="wa" href="https://wa.me/8801516595762" target="_blank">💬</a>
