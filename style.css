@@ -67,3 +67,30 @@ bottom:20px;
 right:20px;
 font-size:30px;
 }
+input{
+width:80%;
+padding:10px;
+margin:10px auto;
+display:block;
+border-radius:20px;
+border:1px solid #ccc;
+}
+
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+gap:15px;
+padding:15px;
+}
+
+.card{
+background:white;
+padding:10px;
+border-radius:10px;
+text-align:center;
+transition:0.3s;
+}
+
+.card:hover{
+transform:scale(1.03);
+}
