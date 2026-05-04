@@ -41,9 +41,22 @@
         .slider img { width: 100%; flex-shrink: 0; }
 
         /* GRID */
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 20px; padding: 0 20px; max-width: 1100px; margin: 20px auto; }
+     .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 15px; /* গ্যাপ একটু কমিয়ে দিন */
+    padding: 0 10px; /* প্যাডিং কমিয়ে ১০ পিক্সেল করুন */
+    max-width: 100%; /* যাতে স্ক্রিনের বাইরে না যায় */
+    margin: 20px auto;
+}
         .grid-item { background: #fff; border-radius: 12px; overflow: hidden; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.3s; }
-        .grid-item img { width: 100%; height: 230px; object-fit: cover; }
+      .grid-item img {
+    width: 100%;
+    height: auto; /* ফিক্সড হাইট তুলে অটো করে দিন */
+    max-height: 230px;
+    object-fit: contain; /* ছবি যাতে কেটে না যায় */
+    display: block;
+}
         .info { padding: 15px; }
         .price { color: #e74c3c; font-weight: bold; margin-bottom: 10px; }
         .btn { display: block; padding: 10px; background: #27ae60; color: white; border-radius: 6px; cursor: pointer; width: 100%; border: none; font-weight: bold; transition: 0.3s; }
@@ -73,21 +86,23 @@
 
         footer { background: #2c3e50; color: white; text-align: center; padding: 40px 20px; margin-top: 50px; width: 100%; clear: both; }
  @media (max-width: 600px) {
-            .grid-container {
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 10px !important;
-                padding: 10px !important;
-            }
-            .grid-item img {
-                height: 160px !important;
-                object-fit: contain !important;
-                background: #f9f9f9;
-            }
-            .info { padding: 10px !important; }
-            .info h3 { font-size: 13px !important; height: 38px; overflow: hidden; }
-            .category-container { gap: 6px !important; padding: 10px !important; }
-            .cat-btn { padding: 6px 12px !important; font-size: 12px !important; }
-        }
+    body {
+        overflow-x: hidden; /* ডানে বামে স্ক্রল বন্ধ করবে */
+    }
+    .grid-container {
+        grid-template-columns: repeat(2, 1fr) !important; /* দুই কলাম নিশ্চিত করবে */
+        gap: 8px !important;
+        padding: 5px !important;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+    .grid-item {
+        width: 100%; /* আইটেম যাতে স্ক্রিনের বাইরে না যায় */
+    }
+    .nav-search-container {
+        max-width: 90%; /* সার্চ বার যাতে স্ক্রিনের বাইরে না যায় */
+    }
+}
     </style>
 </head>
 <body>
