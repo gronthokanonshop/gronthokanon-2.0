@@ -13,7 +13,7 @@
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
         .nav-center { flex: 1; display: flex; justify-content: center; padding: 0 10px; }
         .nav-search-container { display: flex; align-items: center; background: #f1f3f4; border-radius: 20px; padding: 6px 15px; width: 100%; max-width: 500px; border: 1px solid #e0e0e0; }
-        .nav-search-input { border: none; background: transparent; outline: none; width: 100%; font-size: 14px; }
+        .nav-search-input { border: none; background: transparent; outline: none; width: 100%; font-size: 14px; }  se
         .menu-icon { font-size: 21px; cursor: pointer; color: #27ae60; }
         .cart-icon-wrapper { position: relative; font-size: 22px; cursor: pointer; }
         .cart-badge { position: absolute; top: -8px; right: -10px; background: #e74c3c; color: white; font-size: 11px; padding: 2px 6px; border-radius: 50%; font-weight: bold; }
@@ -87,7 +87,9 @@
     <span class="menu-icon" onclick="toggleSidebar()">☰</span>
     <div class="nav-center">
         <div class="nav-search-container">
-            <input type="text" id="searchInput" onkeyup="filterBooks()" placeholder="বই খুঁজুন..." class="nav-search-input">
+            <input type="text" id="searchInput" onkeyup="filterBooks()" placeholder="বই খুঁজুন..." class="nav-search-input"> 
+            <!-- এই লাইনটি আপনার <input> এর ঠিক পরে বসান -->
+<div id="searchSuggestions" style="display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #fff; border: 1px solid #ddd; box-shadow: 0 8px 16px rgba(0,0,0,0.2); z-index: 9999; max-height: 350px; overflow-y: auto; border-radius: 0 0 10px 10px;"></div>
         </div>
     </div>
     <div class="cart-icon-wrapper" onclick="showCart()">
@@ -219,14 +221,71 @@
         if(window.innerWidth < 768) toggleSidebar();
     }
 
-    function filterBooks() {
-        let input = document.getElementById('searchInput').value.toLowerCase();
-        let items = document.getElementsByClassName('grid-item');
-        for (let item of items) {
-            let title = item.querySelector('h3').innerText.toLowerCase();
-            item.style.display = title.includes(input) ? "block" : "none";
+ function filterBooks() {
+    let input = document.getElementById('searchInput').value.trim().toLowerCase();
+    let suggestionBox = document.getElementById('searchSuggestions');
+    let items = document.getElementsByClassName('grid-item');
+    
+    if (input.length === 0) {
+        suggestionBox.style.display = "none";
+        for (let item of items) item.style.display = "block"; // ইনপুট খালি হলে সব বই দেখাবে
+        return;
+    }
+
+    let resultsHTML = "";
+    let foundCount = 0;
+    let searchWords = input.split(/\s+/); // সার্চের শব্দগুলোকে আলাদা করা
+
+    for (let item of items) {
+        let title = item.querySelector('h3').innerText;
+        let lowerTitle = title.toLowerCase();
+        let price = item.querySelector('.price').innerText;
+        let imgSrc = item.querySelector('img').src;
+
+        // চেক করবে সার্চের সবগুলো শব্দ বইয়ের নামের মধ্যে আছে কি না (স্মার্ট সার্চ)
+        let isMatch = searchWords.every(word => lowerTitle.includes(word));
+
+        if (isMatch) {
+            foundCount++;
+            item.style.display = "block"; // গ্রিডে বই দেখাবে
+            
+            // সাজেশন লিস্ট তৈরি (ছবিসহ)
+            resultsHTML += `
+                <div style="display: flex; align-items: center; gap: 10px; padding: 10px; border-bottom: 1px solid #eee; cursor: pointer;" 
+                     onclick="selectBook('${title.replace(/'/g, "\\'")}')">
+                    <img src="${imgSrc}" style="width: 40px; height: 55px; object-fit: cover; border-radius: 4px;">
+                    <div style="text-align: left;">
+                        <h4 style="margin:0; font-size:14px; color:#333;">${title}</h4>
+                        <p style="margin:0; font-size:12px; color:#e74c3c; font-weight:bold;">${price}</p>
+                    </div>
+                </div>`;
+        } else {
+            item.style.display = "none"; // গ্রিড থেকে হাইড করবে
         }
     }
+
+    if (foundCount > 0) {
+        suggestionBox.innerHTML = resultsHTML;
+        suggestionBox.style.display = "block";
+    } else {
+        suggestionBox.innerHTML = '<div style="padding:15px; color:#888; text-align:center;">দুঃখিত, বইটি পাওয়া যায়নি!</div>';
+        suggestionBox.style.display = "block";
+    }
+}
+
+// লিস্ট থেকে বই সিলেক্ট করার ফাংশন
+function selectBook(title) {
+    document.getElementById('searchInput').value = title;
+    document.getElementById('searchSuggestions').style.display = "none";
+    filterBooks(); // বই ফিল্টার হবে
+}
+
+// সাজেশন বক্সের বাইরে ক্লিক করলে তা বন্ধ করা
+document.addEventListener('click', function(e) {
+    if (!document.getElementById('searchInput').contains(e.target)) {
+        document.getElementById('searchSuggestions').style.display = "none";
+    }
+});
 
     function addToCart(name, price) {
         cart.push({ name, price: Number(price) });
