@@ -244,62 +244,75 @@
         if(window.innerWidth < 768 && document.getElementById('sidebar').classList.contains('active')) toggleSidebar();
     }
 
-   function filterBooks() {
-    let input = document.getElementById('searchInput').value.trim().toLowerCase();
-    let suggestionBox = document.getElementById('searchSuggestions');
-    let items = document.getElementsByClassName('grid-item');
-    
-    if (input.length === 0) {
-        suggestionBox.style.display = "none";
-        for (let item of items) item.style.display = "block";
-        return;
-    }
+    function filterBooks() {
+        let input = document.getElementById('searchInput').value.trim().toLowerCase();
+        let suggestionBox = document.getElementById('searchSuggestions');
+        let items = document.getElementsByClassName('grid-item');
+        
+        if (input.length === 0) {
+            suggestionBox.style.display = "none";
+            for (let item of items) item.style.display = "block";
+            return;
+        }
 
-    let resultsHTML = "";
-    let foundCount = 0;
+        let resultsHTML = "";
+        let foundCount = 0;
 
-    for (let item of items) {
-        let title = item.querySelector('h3').innerText;
-        let lowerTitle = title.toLowerCase();
-        let price = item.querySelector('.price').innerText;
-        let imgSrc = item.querySelector('img').src;
+        for (let item of items) {
+            let title = item.querySelector('h3').innerText.trim();
+            let lowerTitle = title.toLowerCase();
+            let price = item.querySelector('.price').innerText;
+            let imgSrc = item.querySelector('img').src;
 
-        // আপডেট করা লজিক: সরাসরি ইনপুট চেক করা
-        if (lowerTitle.includes(input)) {
-            foundCount++;
-            item.style.display = "block";
-            resultsHTML += `
-                <div style="display: flex; align-items: center; gap: 10px; padding: 10px; border-bottom: 1px solid #eee; cursor: pointer;" 
-                     onclick="selectBook('${title.replace(/'/g, "\\'")}')">
-                    <img src="${imgSrc}" style="width: 35px; height: 50px; object-fit: cover; border-radius: 4px;">
-                    <div style="text-align: left;">
-                        <h4 style="margin:0; font-size:13px; color:#333;">${title}</h4>
-                        <p style="margin:0; font-size:12px; color:#e74c3c; font-weight:bold;">${price}</p>
-                    </div>
-                </div>`;
+            // উন্নত সার্চ লজিক: ইনপুট পুরো টাইটেলের অংশ কি না তা দেখা
+            if (lowerTitle.includes(input)) {
+                foundCount++;
+                item.style.display = "block";
+                resultsHTML += `
+                    <div class="suggestion-item" 
+                         style="display: flex; align-items: center; gap: 10px; padding: 10px; border-bottom: 1px solid #eee; cursor: pointer;" 
+                         onclick="selectBook('${title.replace(/'/g, "\\'")}')">
+                        <img src="${imgSrc}" style="width: 35px; height: 50px; object-fit: cover; border-radius: 4px;">
+                        <div style="text-align: left;">
+                            <h4 style="margin:0; font-size:13px; color:#333;">${title}</h4>
+                            <p style="margin:0; font-size:12px; color:#e74c3c; font-weight:bold;">${price}</p>
+                        </div>
+                    </div>`;
+            } else {
+                item.style.display = "none";
+            }
+        }
+
+        if (foundCount > 0) {
+            suggestionBox.innerHTML = resultsHTML;
+            suggestionBox.style.display = "block";
         } else {
-            item.style.display = "none";
+            suggestionBox.innerHTML = '<div style="padding:15px; color:#888; text-align:center; font-size:14px;">বইটি পাওয়া যায়নি!</div>';
+            suggestionBox.style.display = "block";
         }
     }
 
-    if (foundCount > 0) {
-        suggestionBox.innerHTML = resultsHTML;
-        suggestionBox.style.display = "block";
-    } else {
-        suggestionBox.innerHTML = '<div style="padding:15px; color:#888; text-align:center; font-size:14px;">বইটি পাওয়া যায়নি!</div>';
-        suggestionBox.style.display = "block";
-    }
-}
     function selectBook(title) {
-        document.getElementById('searchInput').value = title;
+        let searchInput = document.getElementById('searchInput');
+        searchInput.value = title; // ইনপুটে ফুল নেম বসানো হচ্ছে
         document.getElementById('searchSuggestions').style.display = "none";
-        filterBooks();
+        
+        // গ্রিড ফিল্টার আপডেট করা
+        let items = document.getElementsByClassName('grid-item');
+        let lowerTitle = title.toLowerCase();
+        for (let item of items) {
+            let itemTitle = item.querySelector('h3').innerText.trim().toLowerCase();
+            item.style.display = (itemTitle === lowerTitle) ? "block" : "none";
+        }
     }
 
-    document.addEventListener('click', function(e) {
+    // সাজেশনের বাইরে ক্লিক করলে বন্ধ করার উন্নত লজিক
+    document.addEventListener('mousedown', function(e) {
         let container = document.getElementById('nav-search-container');
+        let suggestionBox = document.getElementById('searchSuggestions');
+        // যদি ক্লিকের টার্গেট সার্চ কন্টেইনার না হয়, তবে সাজেশন বক্স বন্ধ করো
         if (container && !container.contains(e.target)) {
-            document.getElementById('searchSuggestions').style.display = "none";
+            suggestionBox.style.display = "none";
         }
     });
 
@@ -393,26 +406,13 @@
 
         if (!name || !phone || !address) return alert("দয়া করে সব তথ্য পূরণ করুন!");
 
-        let message = `*নতুন অর্ডার (গ্রন্থকানন)*\n`;
-        message += `--------------------------\n`;
-        
+        let message = `*নতুন অর্ডার (গ্রন্থকানন)*\n--------------------------\n`;
         let grouped = {};
         cart.forEach(item => { grouped[item.name] = (grouped[item.name] || 0) + 1; });
-        for (let book in grouped) {
-            message += `• ${book} (${grouped[book]}টি)\n`;
-        }
-
-        message += `--------------------------\n`;
-        message += `👤 নাম: ${name}\n`;
-        message += `📞 ফোন: ${phone}\n`;
-        message += `📍 ঠিকানা: ${address}\n`;
-        message += `💳 পেমেন্ট: ${paymentMethod}\n`;
-        message += `🚚 ডেলিভারি: ৳${delivery}\n`;
-        message += `💰 সর্বমোট: ৳${document.getElementById('total').innerText}\n`;
-        message += `--------------------------\nধন্যবাদ!`;
+        for (let book in grouped) { message += `• ${book} (${grouped[book]}টি)\n`; }
+        message += `--------------------------\n👤 নাম: ${name}\n📞 ফোন: ${phone}\n📍 ঠিকানা: ${address}\n💳 পেমেন্ট: ${paymentMethod}\n🚚 ডেলিভারি: ৳${delivery}\n💰 সর্বমোট: ৳${document.getElementById('total').innerText}\n--------------------------\nধন্যবাদ!`;
 
         window.open(`https://wa.me/8801516595762?text=${encodeURIComponent(message)}`, '_blank');
-        
         cart = []; saveCart(); updateCartUI(); closeOrderForm(); closeCart();
     }
 
@@ -428,6 +428,7 @@
             }
         }, 3500);
     }
+</script>
 </script>
 <footer style="background: #2c3e50; color: white; text-align: center; padding: 40px 20px; margin-top: 50px;">
 <!-- সোশ্যাল মিডিয়া -->
