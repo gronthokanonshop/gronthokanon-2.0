@@ -244,16 +244,57 @@
         if(window.innerWidth < 768 && document.getElementById('sidebar').classList.contains('active')) toggleSidebar();
     }
 
-    function filterBooks() {
-        let input = document.getElementById('searchInput').value.trim().toLowerCase();
-        let suggestionBox = document.getElementById('searchSuggestions');
-        let items = document.getElementsByClassName('grid-item');
-        
-        if (input.length === 0) {
-            suggestionBox.style.display = "none";
-            for (let item of items) item.style.display = "block";
-            return;
+   function filterBooks() {
+    let input = document.getElementById('searchInput').value.trim().toLowerCase();
+    let suggestionBox = document.getElementById('searchSuggestions');
+    let items = document.getElementsByClassName('grid-item');
+    
+    if (input.length === 0) {
+        suggestionBox.style.display = "none";
+        for (let item of items) item.style.display = "block";
+        return;
+    }
+
+    let resultsHTML = "";
+    let foundCount = 0;
+    
+    // সার্চ ইনপুটকে ছোট ছোট শব্দে ভাগ করা (যাতে আগে-পিছে লিখলেও খুঁজে পায়)
+    let searchWords = input.split(/\s+/);
+
+    for (let item of items) {
+        let title = item.querySelector('h3').innerText;
+        let lowerTitle = title.toLowerCase();
+        let price = item.querySelector('.price').innerText;
+        let imgSrc = item.querySelector('img').src;
+
+        // চেক করা হচ্ছে টাইটেলের মধ্যে সার্চের প্রতিটি শব্দ আছে কি না
+        let isMatch = searchWords.every(word => lowerTitle.includes(word));
+
+        if (isMatch) {
+            foundCount++;
+            item.style.display = "block";
+            resultsHTML += `
+                <div style="display: flex; align-items: center; gap: 10px; padding: 10px; border-bottom: 1px solid #eee; cursor: pointer;" 
+                     onclick="selectBook('${title.replace(/'/g, "\\'")}')">
+                    <img src="${imgSrc}" style="width: 35px; height: 50px; object-fit: cover; border-radius: 4px;">
+                    <div style="text-align: left;">
+                        <h4 style="margin:0; font-size:13px; color:#333;">${title}</h4>
+                        <p style="margin:0; font-size:12px; color:#e74c3c; font-weight:bold;">${price}</p>
+                    </div>
+                </div>`;
+        } else {
+            item.style.display = "none";
         }
+    }
+
+    if (foundCount > 0) {
+        suggestionBox.innerHTML = resultsHTML;
+        suggestionBox.style.display = "block";
+    } else {
+        suggestionBox.innerHTML = '<div style="padding:15px; color:#888; text-align:center; font-size:14px;">বইটি পাওয়া যায়নি!</div>';
+        suggestionBox.style.display = "block";
+    }
+}
 
         let resultsHTML = "";
         let foundCount = 0;
