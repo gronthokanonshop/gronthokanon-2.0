@@ -64,6 +64,22 @@
         .cart-floating { position: fixed; bottom: 25px; left: 20px; background: #27ae60; color: white; padding: 10px 15px; border-radius: 30px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 999; }
 
         footer { background: #2c3e50; color: white; text-align: center; padding: 40px 20px; margin-top: 50px; width: 100%; clear: both; }
+ @media (max-width: 600px) {
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 10px !important;
+                padding: 10px !important;
+            }
+            .grid-item img {
+                height: 160px !important;
+                object-fit: contain !important;
+                background: #f9f9f9;
+            }
+            .info { padding: 10px !important; }
+            .info h3 { font-size: 13px !important; height: 38px; overflow: hidden; }
+            .category-container { gap: 6px !important; padding: 10px !important; }
+            .cat-btn { padding: 6px 12px !important; font-size: 12px !important; }
+        }
     </style>
 </head>
 <body>
@@ -84,7 +100,7 @@
 </div>
 
 <div class="moving-bar">
-    <div class="moving-text">🔥 বিশেষ অফার: সকল বইয়ে ১০% অতিরিক্ত ছাড়! 🚚 সারাদেশে ক্যাশ অন হোম ডেলিভারি।</div>
+    <div class="moving-text">🔥 বিশেষ অফার: প্রথম অর্ডার এ পাচ্ছেন ০৫% অতিরিক্ত ছাড়!,কুপন কোড (FIRSTORDER)</div>
 </div>
 
 <!-- NAVBAR -->
@@ -117,35 +133,39 @@
     <button class="cat-btn active" onclick="filterCategory('all', this)">সব বই</button>
     <button class="cat-btn" onclick="filterCategory('hadis', this)">হাদিস</button>
     <button class="cat-btn" onclick="filterCategory('tafsir', this)">তাফসীর</button>
-    <button class="cat-btn" onclick="filterCategory('story', this)">গল্পের বই</button>
+    <button class="cat-btn" onclick="filterCategory('story', this)">আত্নশুদ্ধি বিষয়ক</button>
+    <button class="cat-btn" onclick="filterCategory('story', this)">পর্দা বিষয়ক</button>
+        <button class="cat-btn" onclick="filterCategory('story', this)">উপন্যাস </button>
+      <button class="cat-btn" onclick="filterCategory('story', this)">ইতিহাস</button>
+      <button class="cat-btn" onclick="filterCategory('story', this)">একাডেমিক</button>
 </div>
 
 <!-- BOOK GRID -->
 <div class="grid-container" id="bookGrid">
     <div class="grid-item" data-cat="story">
-        <img src="https://via.placeholder.com/170x230?text=Sajid" alt="বই">
+        <img src="https://i.ibb.co.com/BH7fS6fn/para-1.webp" alt="বই">
         <div class="info">
             <h3>প্যারাডক্সিক্যাল সাজিদ</h3>
             <div class="price">৳ 220</div>
-            <button class="btn" onclick="addToCart('প্যারাডক্সিক্যাল সাজিদ', 220)">কার্টে যোগ করুন</button>
+            <button class="btn" onclick="addToCart('প্যারাডক্সিক্যাল সাজিদ', 220,'https://i.ibb.co.com/BH7fS6fn/para-1.webp')">কার্টে যোগ করুন</button>
         </div>
     </div>
     <div class="grid-item" data-cat="hadis">
-        <img src="https://via.placeholder.com/170x230?text=Dua" alt="বই">
+        <img src="https://i.ibb.co.com/ymSMWMJr/book-0003.webp" alt="বই">
         <div class="info">
-            <h3>দোয়ার ডায়েরি</h3>
+            <h3>আমার প্রিয় দোয়ার ডায়েরি</h3>
             <div class="price">৳ 230</div>
-            <button class="btn" onclick="addToCart('আমার প্রিয় দোয়ার ডায়েরি', 230)">কার্টে যোগ করুন</button>
+            <button class="btn" onclick="addToCart('আমার প্রিয় দোয়ার ডায়েরি', 230, 'https://i.ibb.co.com/ymSMWMJr/book-0003.webp')">কার্টে যোগ করুন</button>
         </div>
     </div>
     <div class="grid-item" data-cat="story">
-        <img src="https://via.placeholder.com/170x230?text=Home" alt="বই">
+        <img src="https://i.ibb.co.com/yBVSXsMn/book-0002.webp" alt="বই">
         <div class="info">
-            <h3>আমার বাড়ি</h3>
+            <h3>তুমি ফিরবে বলে</h3>
             <div class="price">৳ 300</div>
-            <button class="btn" onclick="addToCart('তুমি ফিরবে বলে', 300)">কার্টে যোগ করুন</button>
-        </div>
+       <button class="btn" onclick="addToCart('তুমি ফিরবে বলে', 300, 'https://i.ibb.co.com/yBVSXsMn/book-0002.webp')">কার্টে যোগ করুন</button>
     </div>
+    </div>  
 </div>
 
 <!-- CART DRAWER -->
@@ -160,7 +180,7 @@
 
         <div style="padding: 15px; background: #f9f9f9; border-top: 1px solid #ddd;">
             <div style="display: flex; gap: 5px; margin-bottom: 10px;">
-                <input type="text" id="couponCode" placeholder="কুপন (SAVE10)" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                <input type="text" id="couponCode" placeholder="কুপন (FIRSTORDER)" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
                 <button onclick="applyCoupon()" style="background: #2c3e50; color: white; border: none; padding: 0 12px; border-radius: 5px; cursor: pointer;">Apply</button>
             </div>
             <div style="font-size: 14px; line-height: 1.8;">
@@ -178,7 +198,7 @@
             
             <div style="display: flex; gap: 10px; margin-top: 15px;">
                 <button class="btn" style="background: #34495e; flex: 1;" onclick="closeCart()">আরও কিনুন</button>
-                <button class="btn" style="background: #27ae60; flex: 1;" onclick="openOrderForm()">চেকআউট করুন</button>
+                <button class="btn" style="background: #27ae60; flex: 1;" onclick="openOrderForm()">অর্ডারটি সম্পন্ন করুন</button>
             </div>
         </div>
     </div>
@@ -243,130 +263,138 @@
         }
         if(window.innerWidth < 768 && document.getElementById('sidebar').classList.contains('active')) toggleSidebar();
     }
-
-    function filterBooks() {
-        let input = document.getElementById('searchInput').value.trim().toLowerCase();
-        let suggestionBox = document.getElementById('searchSuggestions');
-        let items = document.getElementsByClassName('grid-item');
-        
-        if (input.length === 0) {
-            suggestionBox.style.display = "none";
-            for (let item of items) item.style.display = "block";
-            return;
-        }
-
-        let resultsHTML = "";
-        let foundCount = 0;
-
-        for (let item of items) {
-            let title = item.querySelector('h3').innerText.trim();
-            let lowerTitle = title.toLowerCase();
-            let price = item.querySelector('.price').innerText;
-            let imgSrc = item.querySelector('img').src;
-
-            // উন্নত সার্চ লজিক: ইনপুট পুরো টাইটেলের অংশ কি না তা দেখা
-            if (lowerTitle.includes(input)) {
-                foundCount++;
-                item.style.display = "block";
-                resultsHTML += `
-                    <div class="suggestion-item" 
-                         style="display: flex; align-items: center; gap: 10px; padding: 10px; border-bottom: 1px solid #eee; cursor: pointer;" 
-                         onclick="selectBook('${title.replace(/'/g, "\\'")}')">
-                        <img src="${imgSrc}" style="width: 35px; height: 50px; object-fit: cover; border-radius: 4px;">
-                        <div style="text-align: left;">
-                            <h4 style="margin:0; font-size:13px; color:#333;">${title}</h4>
-                            <p style="margin:0; font-size:12px; color:#e74c3c; font-weight:bold;">${price}</p>
-                        </div>
-                    </div>`;
-            } else {
-                item.style.display = "none";
-            }
-        }
-
-        if (foundCount > 0) {
-            suggestionBox.innerHTML = resultsHTML;
-            suggestionBox.style.display = "block";
-        } else {
-            suggestionBox.innerHTML = '<div style="padding:15px; color:#888; text-align:center; font-size:14px;">বইটি পাওয়া যায়নি!</div>';
-            suggestionBox.style.display = "block";
-        }
+function filterBooks() {
+    // .normalize("NFC") যুক্ত করা হয়েছে ইউনিকোড সমস্যা মিটাতে
+    let input = document.getElementById('searchInput').value.normalize("NFC").trim().toLowerCase();
+    let suggestionBox = document.getElementById('searchSuggestions');
+    let items = document.getElementsByClassName('grid-item');
+    if (input.length === 0) {
+        suggestionBox.style.display = "none";
+        for (let item of items) item.style.display = "block";
+        return;
     }
 
-    function selectBook(title) {
-        let searchInput = document.getElementById('searchInput');
-        searchInput.value = title; // ইনপুটে ফুল নেম বসানো হচ্ছে
-        document.getElementById('searchSuggestions').style.display = "none";
-        
-        // গ্রিড ফিল্টার আপডেট করা
-        let items = document.getElementsByClassName('grid-item');
+    let resultsHTML = "";
+    let foundCount = 0;
+
+    for (let item of items) {
+        let title = item.querySelector('h3').innerText.normalize("NFC").trim();
         let lowerTitle = title.toLowerCase();
-        for (let item of items) {
-            let itemTitle = item.querySelector('h3').innerText.trim().toLowerCase();
-            item.style.display = (itemTitle === lowerTitle) ? "block" : "none";
+        let price = item.querySelector('.price').innerText;
+        let imgSrc = item.querySelector('img').src;
+
+        // আপডেট করা লজিক: সরাসরি ইনপুট চেক করা
+        if (lowerTitle.includes(input)) {
+            foundCount++;
+            item.style.display = "block";
+            resultsHTML += `
+                <div style="display: flex; align-items: center; gap: 10px; padding: 10px; border-bottom: 1px solid #eee; cursor: pointer;" 
+                     onclick="selectBook('${title.replace(/'/g, "\\'")}')">
+                    <img src="${imgSrc}" style="width: 35px; height: 50px; object-fit: cover; border-radius: 4px;">
+                    <div style="text-align: left;">
+                        <h4 style="margin:0; font-size:13px; color:#333;">${title}</h4>
+                        <p style="margin:0; font-size:12px; color:#e74c3c; font-weight:bold;">${price}</p>
+                    </div>
+                </div>`;
+        } else {
+            item.style.display = "none";
         }
     }
 
-    // সাজেশনের বাইরে ক্লিক করলে বন্ধ করার উন্নত লজিক
-    document.addEventListener('mousedown', function(e) {
+    if (foundCount > 0) {
+        suggestionBox.innerHTML = resultsHTML;
+        suggestionBox.style.display = "block";
+    } else {
+        suggestionBox.innerHTML = '<div style="padding:15px; color:#888; text-align:center; font-size:14px;">বইটি পাওয়া যায়নি!</div>';
+        suggestionBox.style.display = "block";
+    }
+}
+    function selectBook(title) {
+        document.getElementById('searchInput').value = title;
+        document.getElementById('searchSuggestions').style.display = "none";
+        filterBooks();
+    }
+
+    document.addEventListener('click', function(e) {
         let container = document.getElementById('nav-search-container');
-        let suggestionBox = document.getElementById('searchSuggestions');
-        // যদি ক্লিকের টার্গেট সার্চ কন্টেইনার না হয়, তবে সাজেশন বক্স বন্ধ করো
         if (container && !container.contains(e.target)) {
-            suggestionBox.style.display = "none";
+            document.getElementById('searchSuggestions').style.display = "none";
         }
     });
 
-    function addToCart(name, price) {
-        cart.push({ name, price: Number(price) });
-        saveCart();
-        updateCartUI();
-        showCart();
-    }
+   function addToCart(name, price, img) {
+    // এখন থেকে নাম এবং দামের সাথে বইয়ের ছবিও সেভ হবে
+    cart.push({ name: name.trim(), price: Number(price), img: img });
+    saveCart();
+    updateCartUI();
+    showCart();
+}
 
     function saveCart() {
         localStorage.setItem('gronthokanon_cart', JSON.stringify(cart));
     }
 
-    function updateCartUI() {
-        let box = document.getElementById('cartItems');
-        if(!box) return;
-        let subtotal = 0;
-        box.innerHTML = "";
+   function updateCartUI() {
+    let box = document.getElementById('cartItems');
+    if(!box) return;
+    let subtotal = 0;
+    box.innerHTML = "";
 
-        let grouped = {};
-        cart.forEach(item => {
-            if (grouped[item.name]) { grouped[item.name].qty += 1; } 
-            else { grouped[item.name] = { price: item.price, qty: 1 }; }
-        });
-
-        for (let name in grouped) {
-            let item = grouped[name];
-            subtotal += (item.price * item.qty);
-            box.innerHTML += `
-                <div class="cart-item-row">
-                    <div style="width: 40px; height: 55px; background: #f0f0f0; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 18px;">📖</div>
-                    <div style="flex:1; text-align:left;">
-                        <h4 style="font-size:13px; margin:0;">${name}</h4>
-                        <span style="color:#e74c3c; font-size:13px;">৳${item.price}</span>
-                    </div>
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <button class="qty-btn" onclick="changeQty('${name}', -1)">-</button>
-                        <span style="font-weight:bold;">${item.qty}</span>
-                        <button class="qty-btn" onclick="changeQty('${name}', 1)">+</button>
-                    </div>
-                </div>`;
+    // ১. কার্টের আইটেমগুলোকে গ্রুপ করা (নাম, দাম এবং ছবি অনুযায়ী)
+    let grouped = {};
+    cart.forEach(item => {
+        if (grouped[item.name]) { 
+            grouped[item.name].qty += 1; 
+        } else { 
+            grouped[item.name] = { 
+                price: item.price, 
+                qty: 1, 
+                img: item.img || 'https://via.placeholder.com/45x60?text=No+Image' // ছবি না থাকলে ডিফল্ট ছবি
+            }; 
         }
+    });
 
-        let deliveryInput = document.getElementById('location');
-        let delivery = deliveryInput ? Number(deliveryInput.value) : 0;
-        let discountAmt = Math.round(subtotal * (discountPercent / 100));
+    // ২. কার্ট এইচটিএমএল জেনারেট করা
+    for (let name in grouped) {
+        let item = grouped[name];
+        subtotal += (item.price * item.qty);
+        let escapedName = name.replace(/'/g, "\\'"); // সিঙ্গেল কোটেশন হ্যান্ডেল করা
         
-        document.getElementById('count').innerText = cart.length;
-        document.getElementById('floatCount').innerText = cart.length;
-        document.getElementById('subtotal').innerText = subtotal;
-        document.getElementById('discountAmt').innerText = discountAmt;
-        document.getElementById('total').innerText = (subtotal - discountAmt) + delivery;
+        box.innerHTML += `
+            <div class="cart-item-row" style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px;">
+                <img src="${item.img}" style="width: 45px; height: 60px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd;">
+                
+                <div style="flex:1; text-align:left;">
+                    <h4 style="font-size:13px; margin:0; color:#333;">${name}</h4>
+                    <span style="color:#e74c3c; font-size:13px; font-weight:bold;">৳${item.price}</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <button class="qty-btn" onclick="changeQty('${escapedName}', -1)" style="cursor:pointer;">-</button>
+                    <span style="font-weight:bold; font-size:14px;">${item.qty}</span>
+                    <button class="qty-btn" onclick="changeQty('${escapedName}', 1)" style="cursor:pointer;">+</button>
+                </div>
+            </div>`;
     }
+
+    // ৩. সংখ্যা (Count) আপডেট করা - এটি আপনার মিসিং ছিল
+    let totalItems = cart.length;
+    let countBadge = document.getElementById('count');
+    let floatCountBadge = document.getElementById('floatCount');
+
+    if (countBadge) countBadge.innerText = totalItems;
+    if (floatCountBadge) floatCountBadge.innerText = totalItems;
+
+    // ৪. দামের হিসাব আপডেট করা
+    let deliveryInput = document.getElementById('location');
+    let delivery = deliveryInput ? Number(deliveryInput.value) : 0;
+    
+    // discountPercent গ্লোবাল ভেরিয়েবল থেকে আসবে
+    let discountAmt = Math.round(subtotal * (discountPercent / 100));
+    
+    if(document.getElementById('subtotal')) document.getElementById('subtotal').innerText = subtotal;
+    if(document.getElementById('discountAmt')) document.getElementById('discountAmt').innerText = discountAmt;
+    if(document.getElementById('total')) document.getElementById('total').innerText = (subtotal - discountAmt) + delivery;
+}
 
     function changeQty(name, delta) {
         if (delta === 1) {
@@ -381,9 +409,9 @@
 
     function applyCoupon() {
         let code = document.getElementById('couponCode').value.toUpperCase();
-        if (code === "SAVE10") {
-            discountPercent = 10;
-            alert("🎉 ১০% ডিসকাউন্ট যুক্ত হয়েছে!");
+        if (code === "FIRSTORDER") {
+            discountPercent = 05;
+            alert("🎉 ০৫% ডিসকাউন্ট যুক্ত হয়েছে!");
             updateCartUI();
         } else { alert("ভুল কুপন কোড!"); }
     }
@@ -406,13 +434,26 @@
 
         if (!name || !phone || !address) return alert("দয়া করে সব তথ্য পূরণ করুন!");
 
-        let message = `*নতুন অর্ডার (গ্রন্থকানন)*\n--------------------------\n`;
+        let message = `*নতুন অর্ডার (গ্রন্থকানন)*\n`;
+        message += `--------------------------\n`;
+        
         let grouped = {};
         cart.forEach(item => { grouped[item.name] = (grouped[item.name] || 0) + 1; });
-        for (let book in grouped) { message += `• ${book} (${grouped[book]}টি)\n`; }
-        message += `--------------------------\n👤 নাম: ${name}\n📞 ফোন: ${phone}\n📍 ঠিকানা: ${address}\n💳 পেমেন্ট: ${paymentMethod}\n🚚 ডেলিভারি: ৳${delivery}\n💰 সর্বমোট: ৳${document.getElementById('total').innerText}\n--------------------------\nধন্যবাদ!`;
+        for (let book in grouped) {
+            message += `• ${book} (${grouped[book]}টি)\n`;
+        }
+
+        message += `--------------------------\n`;
+        message += `👤 নাম: ${name}\n`;
+        message += `📞 ফোন: ${phone}\n`;
+        message += `📍 ঠিকানা: ${address}\n`;
+        message += `💳 পেমেন্ট: ${paymentMethod}\n`;
+        message += `🚚 ডেলিভারি: ৳${delivery}\n`;
+        message += `💰 সর্বমোট: ৳${document.getElementById('total').innerText}\n`;
+        message += `--------------------------\nধন্যবাদ!`;
 
         window.open(`https://wa.me/8801516595762?text=${encodeURIComponent(message)}`, '_blank');
+        
         cart = []; saveCart(); updateCartUI(); closeOrderForm(); closeCart();
     }
 
@@ -428,7 +469,6 @@
             }
         }, 3500);
     }
-</script>
 </script>
 <footer style="background: #2c3e50; color: white; text-align: center; padding: 40px 20px; margin-top: 50px;">
 <!-- সোশ্যাল মিডিয়া -->
