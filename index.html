@@ -171,18 +171,40 @@
                 <h4 style="display:flex; justify-content:space-between; color:#27ae60; font-size:18px;">মোট: <span>৳<span id="total">0</span></span></h4>
             </div>
             <br>
-            <button class="btn" onclick="openOrderForm()">অর্ডার সম্পন্ন করুন</button>
-        </div>
+          <div style="display: flex; gap: 10px; margin-top: 15px; padding: 10px;">
+    <!-- আরও কিনুন: এটি ক্লিক করলে শুধু কার্ট ড্রয়ারটি বন্ধ হবে -->
+    <button class="btn" style="background: #34495e; flex: 1;" onclick="closeCart()">আরও কিনুন</button>
+    
+    <!-- চেকআউট করুন: এটি ক্লিক করলে পরবর্তী ধাপ অর্থাৎ 'orderModal' ফরমটি ওপেন হবে -->
+    <button class="btn" style="background: #27ae60; flex: 1;" onclick="openOrderForm()">চেকআউট করুন</button>
+</div>
     </div>
 </div>
 
 <!-- শিপিং ফর্ম মডাল (এটা মাঝখানে দেখাবে) -->
 <div id="orderModal" class="modal" style="justify-content:center; align-items:center;">
-    <div style="background:#fff; padding:25px; border-radius:15px; width:90%; max-width:400px;">
-        <h3 style="color:#27ae60; text-align:center;">শিপিং তথ্য দিন</h3><br>
-        <input type="text" id="custName" placeholder="আপনার নাম" style="width:100%; padding:12px; margin-bottom:10px; border:1px solid #ddd; border-radius:8px;">
-        <input type="text" id="custPhone" placeholder="মোবাইল নম্বর" style="width:100%; padding:12px; margin-bottom:10px; border:1px solid #ddd; border-radius:8px;">
-        <textarea id="custAddress" placeholder="সম্পূর্ণ ঠিকানা" style="width:100%; padding:12px; margin-bottom:10px; border:1px solid #ddd; border-radius:8px; height:80px;"></textarea>
+    <div style="background:#fff; padding:25px; border-radius:15px; width:95%; max-width:420px; max-height: 90vh; overflow-y: auto;">
+        <h3 style="color:#27ae60; text-align:center; margin-bottom: 20px;">শিপিং ও পেমেন্ট তথ্য</h3>
+        
+        <!-- কাস্টমার ইনফো -->
+        <input type="text" id="custName" placeholder="আপনার নাম" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ddd; border-radius:8px;">
+        <input type="text" id="custPhone" placeholder="মোবাইল নম্বর" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ddd; border-radius:8px;">
+        <textarea id="custAddress" placeholder="সম্পূর্ণ ঠিকানা" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ddd; border-radius:8px; height:70px;"></textarea>
+
+        <!-- পেমেন্ট মেথড -->
+        <p style="font-weight: bold; margin-bottom: 10px; font-size: 14px;">পেমেন্ট মেথড সিলেক্ট করুন:</p>
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;">
+            <label style="padding: 10px; border: 1px solid #eee; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px;">
+                <input type="radio" name="payment" value="Cash on Delivery" checked> 💵 ক্যাশ অন ডেলিভারি
+            </label>
+            <label style="padding: 10px; border: 1px solid #eee; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px;">
+                <input type="radio" name="payment" value="bKash"> 💖 বিকাশ (01516595762)
+            </label>
+            <label style="padding: 10px; border: 1px solid #eee; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px;">
+                <input type="radio" name="payment" value="Nagad"> 🔶 নগদ (01516595762)
+            </label>
+        </div>
+
         <button class="btn" onclick="confirmOrder()">অর্ডার কনফার্ম করুন</button>
         <button onclick="closeOrderForm()" style="width:100%; margin-top:10px; color:#888; border:none; background:none; cursor:pointer;">ফিরে যান</button>
     </div>
@@ -365,21 +387,43 @@ document.addEventListener('click', function(e) {
     }
     function closeOrderForm() { document.getElementById('orderModal').style.display = 'none'; }
 
-    function confirmOrder() {
-        let name = document.getElementById('custName').value;
-        let phone = document.getElementById('custPhone').value;
-        let address = document.getElementById('custAddress').value;
-        let delivery = document.getElementById('location').value;
+  function confirmOrder() {
+    let name = document.getElementById('custName').value.trim();
+    let phone = document.getElementById('custPhone').value.trim();
+    let address = document.getElementById('custAddress').value.trim();
+    let delivery = document.getElementById('location').value;
+    let paymentMethod = document.querySelector('input[name="payment"]:checked').value;
 
-        if (!name || !phone || !address) return alert("সব তথ্য দিন!");
+    if (!name || !phone || !address) return alert("দয়া করে সব তথ্য পূরণ করুন!");
 
-        let message = `*নতুন অর্ডার (গ্রন্থকানন)*\n--------------------------\n`;
-        cart.forEach((item, i) => { message += `${i + 1}. ${item.name} - ৳${item.price}\n`; });
-        message += `--------------------------\n*নাম:* ${name}\n*ফোন:* ${phone}\n*ঠিকানা:* ${address}\n*ডেলিভারি:* ৳${delivery}\n*সর্বমোট:* ৳${document.getElementById('total').innerText}\n\nধন্যবাদ!`;
-
-        window.open(`https://wa.me/8801516595762?text=${encodeURIComponent(message)}`, '_blank');
-        cart = []; saveCart(); updateCartUI(); closeOrderForm(); closeCart();
+    // হোয়াটসঅ্যাপ মেসেজ ফরম্যাট
+    let message = `*নতুন অর্ডার (গ্রন্থকানন)*\n`;
+    message += `--------------------------\n`;
+    
+    let grouped = {};
+    cart.forEach(item => { grouped[item.name] = (grouped[item.name] || 0) + 1; });
+    for (let book in grouped) {
+        message += `• ${book} (${grouped[book]}টি)\n`;
     }
+
+    message += `--------------------------\n`;
+    message += `👤 নাম: ${name}\n`;
+    message += `📞 ফোন: ${phone}\n`;
+    message += `📍 ঠিকানা: ${address}\n`;
+    message += `💳 পেমেন্ট: ${paymentMethod}\n`;
+    message += `🚚 ডেলিভারি: ৳${delivery}\n`;
+    message += `💰 সর্বমোট: ৳${document.getElementById('total').innerText}\n`;
+    message += `--------------------------\nধন্যবাদ!`;
+
+    window.open(`https://wa.me/8801516595762?text=${encodeURIComponent(message)}`, '_blank');
+    
+    // অর্ডার সম্পন্ন হওয়ার পর পরিষ্কার করা
+    cart = []; 
+    saveCart(); 
+    updateCartUI(); 
+    closeOrderForm(); 
+    closeCart();
+}
 
     // SLIDER
     const slider = document.getElementById('mainSlider');
