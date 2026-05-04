@@ -244,57 +244,16 @@
         if(window.innerWidth < 768 && document.getElementById('sidebar').classList.contains('active')) toggleSidebar();
     }
 
-   function filterBooks() {
-    let input = document.getElementById('searchInput').value.trim().toLowerCase();
-    let suggestionBox = document.getElementById('searchSuggestions');
-    let items = document.getElementsByClassName('grid-item');
-    
-    if (input.length === 0) {
-        suggestionBox.style.display = "none";
-        for (let item of items) item.style.display = "block";
-        return;
-    }
-
-    let resultsHTML = "";
-    let foundCount = 0;
-    
-    // সার্চ ইনপুটকে ছোট ছোট শব্দে ভাগ করা (যাতে আগে-পিছে লিখলেও খুঁজে পায়)
-    let searchWords = input.split(/\s+/);
-
-    for (let item of items) {
-        let title = item.querySelector('h3').innerText;
-        let lowerTitle = title.toLowerCase();
-        let price = item.querySelector('.price').innerText;
-        let imgSrc = item.querySelector('img').src;
-
-        // চেক করা হচ্ছে টাইটেলের মধ্যে সার্চের প্রতিটি শব্দ আছে কি না
-        let isMatch = searchWords.every(word => lowerTitle.includes(word));
-
-        if (isMatch) {
-            foundCount++;
-            item.style.display = "block";
-            resultsHTML += `
-                <div style="display: flex; align-items: center; gap: 10px; padding: 10px; border-bottom: 1px solid #eee; cursor: pointer;" 
-                     onclick="selectBook('${title.replace(/'/g, "\\'")}')">
-                    <img src="${imgSrc}" style="width: 35px; height: 50px; object-fit: cover; border-radius: 4px;">
-                    <div style="text-align: left;">
-                        <h4 style="margin:0; font-size:13px; color:#333;">${title}</h4>
-                        <p style="margin:0; font-size:12px; color:#e74c3c; font-weight:bold;">${price}</p>
-                    </div>
-                </div>`;
-        } else {
-            item.style.display = "none";
+    function filterBooks() {
+        let input = document.getElementById('searchInput').value.trim().toLowerCase();
+        let suggestionBox = document.getElementById('searchSuggestions');
+        let items = document.getElementsByClassName('grid-item');
+        
+        if (input.length === 0) {
+            suggestionBox.style.display = "none";
+            for (let item of items) item.style.display = "block";
+            return;
         }
-    }
-
-    if (foundCount > 0) {
-        suggestionBox.innerHTML = resultsHTML;
-        suggestionBox.style.display = "block";
-    } else {
-        suggestionBox.innerHTML = '<div style="padding:15px; color:#888; text-align:center; font-size:14px;">বইটি পাওয়া যায়নি!</div>';
-        suggestionBox.style.display = "block";
-    }
-}
 
         let resultsHTML = "";
         let foundCount = 0;
@@ -306,6 +265,7 @@
             let price = item.querySelector('.price').innerText;
             let imgSrc = item.querySelector('img').src;
 
+            // সার্চের প্রতিটি শব্দ টাইটেলে আছে কি না চেক করা
             let isMatch = searchWords.every(word => lowerTitle.includes(word));
 
             if (isMatch) {
@@ -341,7 +301,8 @@
     }
 
     document.addEventListener('click', function(e) {
-        if (!document.getElementById('nav-search-container')?.contains(e.target)) {
+        let container = document.getElementById('nav-search-container');
+        if (container && !container.contains(e.target)) {
             document.getElementById('searchSuggestions').style.display = "none";
         }
     });
@@ -359,6 +320,7 @@
 
     function updateCartUI() {
         let box = document.getElementById('cartItems');
+        if(!box) return;
         let subtotal = 0;
         box.innerHTML = "";
 
@@ -386,7 +348,8 @@
                 </div>`;
         }
 
-        let delivery = Number(document.getElementById('location').value);
+        let deliveryInput = document.getElementById('location');
+        let delivery = deliveryInput ? Number(deliveryInput.value) : 0;
         let discountAmt = Math.round(subtotal * (discountPercent / 100));
         
         document.getElementById('count').innerText = cart.length;
@@ -399,7 +362,7 @@
     function changeQty(name, delta) {
         if (delta === 1) {
             let item = cart.find(i => i.name === name);
-            cart.push({ name: item.name, price: item.price });
+            if(item) cart.push({ name: item.name, price: item.price });
         } else {
             let index = cart.findLastIndex(i => i.name === name);
             if (index !== -1) cart.splice(index, 1);
@@ -408,7 +371,8 @@
     }
 
     function applyCoupon() {
-        if (document.getElementById('couponCode').value.toUpperCase() === "SAVE10") {
+        let code = document.getElementById('couponCode').value.toUpperCase();
+        if (code === "SAVE10") {
             discountPercent = 10;
             alert("🎉 ১০% ডিসকাউন্ট যুক্ত হয়েছে!");
             updateCartUI();
@@ -429,7 +393,7 @@
         let phone = document.getElementById('custPhone').value.trim();
         let address = document.getElementById('custAddress').value.trim();
         let delivery = document.getElementById('location').value;
-        let paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+        let paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || "COD";
 
         if (!name || !phone || !address) return alert("দয়া করে সব তথ্য পূরণ করুন!");
 
@@ -459,45 +423,13 @@
     // SLIDER
     const slider = document.getElementById('mainSlider');
     let currentImg = 0;
-    setInterval(() => {
-        const imgs = document.querySelectorAll('.slider img');
-        if(imgs.length > 0) {
-            currentImg = (currentImg + 1) % imgs.length;
-            slider.scrollLeft = currentImg * slider.offsetWidth;
-        }
-    }, 3500);
+    if(slider) {
+        setInterval(() => {
+            const imgs = slider.querySelectorAll('img');
+            if(imgs.length > 0) {
+                currentImg = (currentImg + 1) % imgs.length;
+                slider.scrollLeft = currentImg * slider.offsetWidth;
+            }
+        }, 3500);
+    }
 </script>
-
-<!-- FOOTER -->
-<footer>
-    <div class="social-section" style="margin-bottom: 25px;">
-        <p style="margin-bottom: 15px; font-weight: bold; font-size: 18px;">আমাদের সাথে যুক্ত থাকুন</p>
-        <div style="display: flex; justify-content: center; align-items: center; gap: 20px;">
-            <a href="https://facebook.com/gronthokanon0943" target="_blank">
-                <img src="https://i.ibb.co.com/nGhy2N4/fb-png.webp" alt="Facebook" style="width: 55px;">
-            </a>
-            <a href="https://wa.me/8801516595762" target="_blank">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width: 45px;">
-            </a>
-        </div>
-    </div>
-
-    <div style="margin-bottom: 25px;">
-        <p style="margin-bottom: 15px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">— আমরা গ্রহণ করি —</p>
-        <div style="display: flex; justify-content: center; gap: 15px;">
-            <img src="https://i.ibb.co.com/ksGJHftT/bkash-logo.jpg" width="50" style="border-radius: 8px;">
-            <img src="https://i.ibb.co.com/0pvLZ3b8/1725618513nagad-logo.png" width="50" style="border-radius: 8px;">
-        </div>
-    </div>
-
-    <div style="margin-bottom: 20px; font-size: 15px; color: #ddd;">
-        <p>📞 হটলাইন: +8801516595762</p>
-        <p>📍 ঢাকা, বাংলাদেশ</p>
-    </div>
-
-    <hr style="border: 0; border-top: 1px solid #444; margin-bottom: 20px; width: 60%; margin: 20px auto;">
-    <p>&copy; 2024 <strong>গ্রন্থকানন</strong> | সর্বস্বত্ব সংরক্ষিত</p>
-</footer>
-
-</body>
-</html>
