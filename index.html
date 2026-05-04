@@ -91,9 +91,9 @@
 <nav class="navbar">
     <span class="menu-icon" onclick="toggleSidebar()">☰</span>
     <div class="nav-center">
-        <div class="nav-search-container">
-            <input type="text" id="searchInput" onkeyup="filterBooks()" placeholder="বই খুঁজুন..." class="nav-search-input"> 
-            <div id="searchSuggestions"></div>
+        <div class="nav-search-container" id="nav-search-container"> <!-- এখানে ID যোগ করা হয়েছে -->
+            <input type="text" id="searchInput" oninput="filterBooks()" placeholder="বই খুঁজুন..." class="nav-search-input"> 
+            <div id="searchSuggestions" class="search-suggestions-box"></div>
         </div>
     </div>
     <div class="cart-icon-wrapper" onclick="showCart()">
