@@ -374,7 +374,7 @@ function makeCard(b) {
     const n = b.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
     const pct = discountPct(b);
     return `
-    <div class="book-card" onclick="openBookDetails(${JSON.stringify(b)})">
+    <div class="book-card" onclick="openBookDetails(${books.indexOf(b)})">
         ${pct > 0 ? `<div class="discount-badge">${pct}% ছাড়</div>` : ''}
         <img src="${b.img}" alt="বই" loading="lazy">
         <div class="book-card-info">
@@ -602,8 +602,8 @@ if (slider) {
     }, 3500);
 }
 
-function openBookDetails(b) {
-    if (typeof b === 'string') b = JSON.parse(b);
+function openBookDetails(idx) {
+    const b = books[idx];
     currentBookForOrder = { name: b.name, price: b.price, img: b.img };
     const pct = discountPct(b);
     document.getElementById('detailImg').src = b.img;
