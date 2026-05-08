@@ -149,17 +149,17 @@
 
 <div class="category-container">
     <button class="cat-btn active" onclick="filterCategory('all', this)">সব বই</button>
-    <button class="cat-btn" onclick="filterCategory('hadis', this)">হাদিস</button>
-    <button class="cat-btn" onclick="filterCategory('tafsir', this)">তাফসীর</button>
-<button class="cat-btn" onclick="filterCategory('selfhelp', this)">আত্মশুদ্ধি বিষয়ক</button>
-<button class="cat-btn" onclick="filterCategory('porda', this)">পর্দা বিষয়ক</button>
+    <button class="cat-btn" onclick="filterCategory('new book', this)">নতুন প্রকাশিত</button>
+    <button class="cat-btn" onclick="filterCategory('best selling', this)">বেস্ট সেলিং</button>
+<button class="cat-btn" onclick="filterCategory('selfhelp', this)">আত্মশুদ্ধি ও অনুপ্রেরণামূলক</button>
+<button class="cat-btn" onclick="filterCategory('porda', this)">নারীর পর্দা</button>
 <button class="cat-btn" onclick="filterCategory('novel', this)">উপন্যাস</button>
 <button class="cat-btn" onclick="filterCategory('history', this)">ইতিহাস</button>
 <button class="cat-btn" onclick="filterCategory('academic', this)">একাডেমিক</button>
-
+</div>
 <!-- BOOK GRID -->
     <div class="grid-container">
-<div class="grid-item" data-cat="story" onclick="openBookDetails('প্যারাডক্সিক্যাল সাজিদ', 'আরিফ আজাদ', '220', 'গার্ডিয়ান পাবলিকেশন', '১২০ পৃষ্ঠা', '১০ কপি', 'ইসলামিক বই', 'https://i.ibb.co.com/BH7fS6fn/para-1.webp')">
+<div class="grid-item" data-cat="best selling" onclick="openBookDetails('প্যারাডক্সিক্যাল সাজিদ', 'আরিফ আজাদ', '220', 'গার্ডিয়ান পাবলিকেশন', '১২০ পৃষ্ঠা', '১০ কপি', 'ইসলামিক বই', 'https://i.ibb.co.com/BH7fS6fn/para-1.webp')">
     <img src="https://i.ibb.co.com/BH7fS6fn/para-1.webp" alt="বই">
     <div class="info">
         <h3>প্যারাডক্সিক্যাল সাজিদ</h3>
@@ -169,20 +169,22 @@
     </div>
 </div>
 
-    <div class="grid-item" data-cat="selfhelp">
+    <div class="grid-item" data-cat="best selling" onclick="openBookDetails('আমার প্রিয় দোয়ার ডায়েরি', 'শারিন সফি অদ্রিতা', '230', 'রাইয়্যান পাবলিকেশন', ২২৪ পৃষ্ঠা', '১০ কপি', 'ইসলামিক বই', 'https://i.ibb.co.com/ymSMWMJr/book-0003.webp')">
         <img src="https://i.ibb.co.com/ymSMWMJr/book-0003.webp" alt="বই">
         <div class="info">
             <h3>আমার প্রিয় দোয়ার ডায়েরি</h3>
+            div class="author-name">শারিন সফি অদ্রিতা</div>
             <div class="price">৳ 230</div>
             <button class="btn" onclick="addToCart('আমার প্রিয় দোয়ার ডায়েরি', 230, 'https://i.ibb.co.com/ymSMWMJr/book-0003.webp')">কার্টে যোগ করুন</button>
         </div>
     </div>
-    <div class="grid-item" data-cat="selphelp">
+    <div class="grid-item" data-cat="selfhelp" onclick="openBookDetails('তুমি ফিরবে বলে', জাকারিয়া মাসুদ', '230', 'সাবিল পাবলিকেশন', ১৯২৪ পৃষ্ঠা', '১০ কপি', 'ইসলামিক বই', 'https://i.ibb.co.com/yBVSXsMn/book-0002.webp')">
         <img src="https://i.ibb.co.com/yBVSXsMn/book-0002.webp" alt="বই">
         <div class="info">
             <h3>তুমি ফিরবে বলে</h3>
+              div class="author-name">জাকারিয়া মাসুদ</div>
             <div class="price">৳ 300</div>
-       <button class="btn" onclick="addToCart('তুমি ফিরবে বলে', 300, 'https://i.ibb.co.com/yBVSXsMn/book-0002.webp')">কার্টে যোগ করুন</button>3
+       <button class="btn" onclick="addToCart('তুমি ফিরবে বলে', 300, 'https://i.ibb.co.com/yBVSXsMn/book-0002.webp')">কার্টে যোগ করুন</button>
     </div>  
 </div>
 
