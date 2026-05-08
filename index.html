@@ -87,7 +87,7 @@
         .label { color: #555; width: 100px; font-weight: bold; }
         .text-red { color: #e74c3c; font-weight: bold; }
         .detail-desc { margin-top: 15px; font-size: 14px; line-height: 1.6; border-top: 1px solid #eee; padding-top: 10px; }
-        .order-btn-fixed { background: #e74c3c; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px; font-size: 16px; }
+        .order-btn-fixed { background: #27ae60; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px; font-size: 16px; }
 
         /* FLOATERS */
         .wa-float { position: fixed; bottom: 25px; right: 25px; z-index: 1000; }
@@ -138,9 +138,28 @@
         <!-- JavaScript দিয়ে ভরবে -->
     </div>
 
-    <div class="sidebar-menu-item">
-        📜 আমাদের সম্পর্কে
-    </div>
+   <div class="sidebar-menu-item" onclick="toggleSubMenu('aboutSub')">
+    📜 আমাদের সম্পর্কে <span id="aboutArrow">▶</span>
+</div>
+<div class="sidebar-sub" id="aboutSub" style="padding: 15px 20px; font-size: 13px; line-height: 1.9; color: #555;">
+    <p style="margin-bottom: 12px;">
+        <strong style="color: #27ae60; font-size: 15px;">গ্রন্থকানন</strong> — বইয়ের এক অনন্য রাজ্য। আমরা বিশ্বাস করি, একটি ভালো বই মানুষের চিন্তা, চরিত্র ও জীবনকে আলোকিত করতে পারে। সেই বিশ্বাস থেকেই গ্রন্থকাননের যাত্রা শুরু।
+    </p>
+    <p style="margin-bottom: 12px;">
+        আমাদের মূল লক্ষ্য হলো দেশের প্রতিটি মানুষের কাছে সাশ্রয়ী মূল্যে মানসম্পন্ন ইসলামিক বই পৌঁছে দেওয়া। আমরা দেশের শীর্ষস্থানীয় প্রকাশনীগুলোর সেরা বইগুলো একত্রিত করে আপনার দোরগোড়ায় পৌঁছে দিই — দ্রুত, নির্ভরযোগ্য এবং যত্নসহকারে।
+    </p>
+    <p style="margin-bottom: 12px;">
+        আমাদের সংগ্রহে রয়েছে আত্মশুদ্ধি, অনুপ্রেরণা, হাদিস, ইতিহাস, উপন্যাসসহ বিভিন্ন বিষয়ের শত শত বই। প্রতিটি বই যত্নসহকারে বাছাই করা হয়েছে — যাতে পাঠক সত্যিকারের উপকৃত হন।
+    </p>
+    <p style="margin-bottom: 12px;">
+        আমরা শুধু বই বিক্রি করি না — আমরা জ্ঞানের আলো ছড়িয়ে দিতে চাই। আপনার প্রতিটি অর্ডার আমাদের কাছে একটি আমানত, এবং সেই আমানত রক্ষা করাই আমাদের প্রতিশ্রুতি।
+    </p>
+    <hr style="border: none; border-top: 1px solid #eee; margin: 12px 0;">
+    <p style="color: #27ae60; font-weight: bold; margin-bottom: 6px;">📞 হটলাইন: 01516595762</p>
+    <p style="margin-bottom: 6px;">⏰ সময়: সকাল ৯টা — রাত ১০টা</p>
+    <p style="margin-bottom: 6px;">🚚 ডেলিভারি: সারা বাংলাদেশে</p>
+    <p>📍 ঢাকা, বাংলাদেশ</p>
+</div>
 </div>
 
 <div class="moving-bar">
