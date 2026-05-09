@@ -624,23 +624,75 @@ function closeCart() { document.getElementById('cartBox').style.display = 'none'
 function openOrderForm() { if (cart.length === 0) return alert('কার্ট খালি!'); document.getElementById('orderModal').style.display = 'flex'; }
 function closeOrderForm() { document.getElementById('orderModal').style.display = 'none'; }
 
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwUu3eqNtc6hvNcotrw58TRLjjcpyhm7XSMni6FOvEVIWZWeSkE5TEwJ0eNpzdkIV1YgQ/exec';
+
 function confirmOrder() {
     const name = document.getElementById('custName').value.trim();
     const phone = document.getElementById('custPhone').value.trim();
     const address = document.getElementById('custAddress').value.trim();
     const delivery = document.getElementById('location').value;
     const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || 'COD';
+
     if (!name || !phone || !address) return alert('দয়া করে সব তথ্য পূরণ করুন!');
     if (phone.length !== 11) return alert('সঠিক ১১ সংখ্যার মোবাইল নম্বর দিন!');
-    let message = `*নতুন অর্ডার (গ্রন্থকানন)*\n--------------------------\n`;
+
     const grouped = {};
     cart.forEach(item => { grouped[item.name] = (grouped[item.name] || 0) + 1; });
-    for (let book in grouped) message += `• ${book} (${grouped[book]}টি)\n`;
-    message += `--------------------------\n👤 নাম: ${name}\n📞 ফোন: ${phone}\n📍 ঠিকানা: ${address}\n💳 পেমেন্ট: ${paymentMethod}\n🚚 ডেলিভারি: ৳${delivery}\n💰 সর্বমোট: ৳${document.getElementById('total').innerText}\n--------------------------\nধন্যবাদ!`;
-    window.open(`https://wa.me/8801516595762?text=${encodeURIComponent(message)}`, '_blank');
-    cart = []; saveCart(); updateCartUI(); closeOrderForm(); closeCart();
-}
+    const bookList = Object.entries(grouped).map(([k, v]) => `${k} (${v}টি)`).join(', ');
+    const total = document.getElementById('total').innerText;
 
+    const data = {
+        name, phone, address,
+        books: bookList,
+        payment: paymentMethod,
+        delivery: '৳' + delivery,
+        total: '৳' + total
+    };
+
+    // Google Sheets এ পাঠাও
+    fetch(SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+
+    // Customer কে confirmation দেখাও
+    closeOrderForm();
+    closeCart();
+    cart = [];
+    saveCart();
+    updateCartUI();
+    
+document.body.innerHTML += `
+    <div id="confirmMsg" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:99999; display:flex; justify-content:center; align-items:center; backdrop-filter:blur(5px);">
+        <div style="background:#fff; border-radius:20px; padding:35px 30px; text-align:center; max-width:340px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.3); animation:popIn 0.4s ease;">
+            
+            <div style="width:80px; height:80px; background:linear-gradient(135deg,#27ae60,#2ecc71); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; box-shadow:0 8px 20px rgba(39,174,96,0.4);">
+                <span style="font-size:35px;">✓</span>
+            </div>
+            
+            <h2 style="color:#2c3e50; margin-bottom:8px; font-size:22px;">অর্ডার নিশ্চিত হয়েছে!</h2>
+            <p style="color:#27ae60; font-weight:bold; font-size:13px; margin-bottom:20px; letter-spacing:1px;">ORDER CONFIRMED</p>
+            
+            <div style="background:#f8f9fa; border-radius:12px; padding:15px; margin-bottom:20px; text-align:left;">
+                <p style="margin-bottom:8px; font-size:13px; color:#555;">👤 <strong>${name}</strong></p>
+                <p style="margin-bottom:8px; font-size:13px; color:#555;">📞 ${phone}</p>
+                <p style="margin-bottom:8px; font-size:13px; color:#555;">📍 ${address}</p>
+                <p style="margin-bottom:0; font-size:13px; color:#e74c3c; font-weight:bold;">💰 মোট: ৳${total}</p>
+            </div>
+            
+            <p style="color:#888; font-size:12px; margin-bottom:20px; line-height:1.6;">আমরা শীঘ্রই <strong>${phone}</strong> নম্বরে যোগাযোগ করব। ধন্যবাদ গ্রন্থকানন এ অর্ডার করার জন্য! 📚</p>
+            
+            <button onclick="document.getElementById('confirmMsg').remove()" style="background:linear-gradient(135deg,#27ae60,#2ecc71); color:white; border:none; padding:13px 40px; border-radius:25px; font-weight:bold; cursor:pointer; font-size:15px; box-shadow:0 5px 15px rgba(39,174,96,0.4); width:100%;">চমৎকার! 🎉</button>
+        </div>
+    </div>
+    <style>
+        @keyframes popIn {
+            from { transform:scale(0.8); opacity:0; }
+            to { transform:scale(1); opacity:1; }
+        }
+    </style>`;
 // SLIDER
 const slider = document.getElementById('mainSlider');
 let currentImg = 0;
