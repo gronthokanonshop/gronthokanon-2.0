@@ -136,7 +136,14 @@
     </div>
     <div class="sidebar-sub" id="pubSub" id="publisherList">
         <!-- JavaScript দিয়ে ভরবে -->
-    </div>
+    </div> 
+    <!-- লেখক -->
+<div class="sidebar-menu-item" onclick="toggleSubMenu('authorSub')">
+    ✍️ লেখক <span id="authorArrow">▶</span>
+</div>
+<div class="sidebar-sub" id="authorSub">
+    <!-- JavaScript দিয়ে ভরবে -->
+</div>
 
    <div class="sidebar-menu-item" onclick="toggleSubMenu('aboutSub')">
     📜 আমাদের সম্পর্কে <span id="aboutArrow">▶</span>
@@ -435,7 +442,30 @@ function buildPublisherList() {
         <div class="sidebar-sub-item" onclick="filterByPublisher('${p.replace(/'/g,"\\'")}'); toggleSidebar()">
             ${p}
         </div>`).join('');
+} 
+  function buildAuthorList() {
+    const authors = [...new Set(books.map(b => b.author))].sort();
+    const box = document.getElementById('authorSub');
+    box.innerHTML = authors.map(a => `
+        <div class="sidebar-sub-item" onclick="filterByAuthor('${a.replace(/'/g,"\\'")}'); toggleSidebar()">
+            ${a}
+        </div>`).join('');
 }
+
+function filterByAuthor(author) {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('searchSuggestions').style.display = 'none';
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    const filtered = books.filter(b => b.author === author);
+    const wrapper = document.getElementById('sectionsWrapper');
+    document.getElementById('searchResultWrapper').style.display = 'none';
+    wrapper.style.display = 'block';
+    wrapper.innerHTML = `
+        <div class="cat-section">
+            <div class="cat-section-title">${author} <span>${filtered.length}টি বই</span></div>
+            <div class="book-row">${filtered.map(makeCard).join('')}</div>
+        </div>`;
+}  
 
 function filterByPublisher(pub) {
     document.getElementById('searchInput').value = '';
@@ -520,7 +550,7 @@ document.addEventListener('click', function(e) {
         document.getElementById('searchSuggestions').style.display = 'none';
 });
 
-window.onload = () => { renderSections(books); buildPublisherList(); updateCartUI(); };
+window.onload = () => { renderSections(books); buildPublisherList(); buildAuthorList();  updateCartUI(); };
 
 function toggleSidebar() {
     document.getElementById('sidebar').classList.toggle('active');
